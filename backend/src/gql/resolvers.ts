@@ -1,8 +1,17 @@
+import { ForbiddenError } from 'apollo-server';
 import jwt from 'jsonwebtoken';
 import todoItemsTable from '../database/tables/todo-items-table';
 import usersTable from '../database/tables/users-table';
 import environment from '../environment';
 import { GqlContext } from './context';
+
+const withAuthorization = (fn: Function) => (parent: any, args: any, ctx: GqlContext) => {
+  if (ctx.user === null) {
+    throw new ForbiddenError('You are not allowed to access this part of the Graph');
+  }
+
+  return fn(parent, args, ctx);
+};
 
 const encodeId = (type: string, dbId: number) => {
   return Buffer.from(`${type}:${dbId}`).toString('base64');
@@ -15,14 +24,14 @@ const decodeId = (encodedId: string) => {
 
 export default {
   Query: {
-    todoItems: async (_: any, __: any, ctx: GqlContext) => {
+    todoItems: withAuthorization(async (_: any, __: any, ctx: GqlContext) => {
       const items = (await todoItemsTable.findByUserId(ctx.user.id)).map((item) => ({
         ...item,
         id: encodeId('Todo', item.id),
       }));
 
       return items;
-    },
+    }),
   },
   Mutation: {
     addTodoItem: async (_: void, args: { item: string; displayOrder: number }, ctx: GqlContext) => {
