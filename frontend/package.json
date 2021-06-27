@@ -10,6 +10,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/react-relay": "^11.0.1",
     "bootstrap": "^5.0.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -24,7 +25,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "relay": "relay-compiler --src ./src --schema ./schema.json"
+    "relay": "relay-compiler --src ./src --schema ./schema.graphql --language typescript --artifactDirectory ./src/__generated__ --extensions=ts --extensions=js --extensions=tsx --extensions=jsx",
+    "schema": "apollo client:download-schema --endpoint=\"http://localhost:4000\" schema.graphql"
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +53,7 @@
     "env-cmd": "^10.1.0",
     "graphql": "^15.5.1",
     "node-sass": "5",
-    "relay-compiler": "^11.0.2"
+    "relay-compiler": "^11.0.2",
+    "relay-compiler-language-typescript": "^14.0.0"
   }
 }

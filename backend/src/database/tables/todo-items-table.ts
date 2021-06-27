@@ -18,6 +18,15 @@ class TodoItemsTable {
     return camelcaseKeys(result.rows[0]) ?? null;
   }
 
+  async findByUserId(userId: number): Promise<Array<TodoItemsTableRecord>> {
+    const result = await pool.query<TodoItemsTableRecord>(
+      'SELECT * FROM todo_items WHERE user_id = $1',
+      [userId]
+    );
+
+    return result.rows.map((row) => camelcaseKeys(row));
+  }
+
   async insert(
     record: Pick<TodoItemsTableRecord, Exclude<keyof TodoItemsTableRecord, 'id'>>
   ): Promise<number> {

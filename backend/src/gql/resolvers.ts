@@ -4,10 +4,24 @@ import usersTable from '../database/tables/users-table';
 import environment from '../environment';
 import { GqlContext } from './context';
 
+const encodeId = (type: string, dbId: number) => {
+  return Buffer.from(`${type}:${dbId}`).toString('base64');
+};
+
+const decodeId = (encodedId: string) => {
+  const [type, id] = Buffer.from(encodedId, 'base64').toString().split(':');
+  return { type, id: parseInt(id, 10) };
+};
+
 export default {
   Query: {
-    testMessage: () => {
-      return 'Hello World!';
+    todoItems: async (_: any, __: any, ctx: GqlContext) => {
+      const items = (await todoItemsTable.findByUserId(ctx.user.id)).map((item) => ({
+        ...item,
+        id: encodeId('Todo', item.id),
+      }));
+
+      return items;
     },
   },
   Mutation: {
@@ -18,10 +32,16 @@ export default {
         userId: ctx.user.id,
       });
 
-      return await todoItemsTable.findOne(id);
+      const todoItem = await todoItemsTable.findOne(id);
+      return !todoItem
+        ? null
+        : {
+            ...todoItem,
+            id: encodeId('Todo', todoItem.id),
+          };
     },
-    removeTodoItem: (_: void, args: { id: number }, ctx: GqlContext) => {
-      return todoItemsTable.delete(args.id, ctx.user.id);
+    removeTodoItem: (_: void, args: { id: string }, ctx: GqlContext) => {
+      return todoItemsTable.delete(decodeId(args.id).id, ctx.user.id);
     },
     login: async (_: void, args: { email: string; password: string }) => {
       const { email, password } = args;
