@@ -15,4 +15,7 @@ export default () => ({
   jwt: {
     secret: process.env.TODO_APP_JWT_SECRET,
   },
+  cors: {
+    host: process.env.TODO_APP_SERVER_CORS,
+  },
 });

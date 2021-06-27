@@ -1,8 +1,9 @@
 import pool from '../db-pool';
+import camelcaseKeys from 'camelcase-keys';
 
 export interface UsersTableRecord {
-  first_name: string | null;
-  last_name: string | null;
+  firstName: string | null;
+  lastName: string | null;
   email: string;
   id: number;
 }
@@ -13,7 +14,7 @@ class UsersTable {
       email,
     ]);
 
-    return result.rows[0] ?? null;
+    return result.rows[0] ? camelcaseKeys(result.rows[0]) : null;
   }
 
   async findOneByEmailAndPassword(

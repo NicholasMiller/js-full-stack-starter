@@ -1,9 +1,10 @@
 import pool from '../db-pool';
+import camelcaseKeys from 'camelcase-keys';
 
 export interface TodoItemsTableRecord {
-  user_id: number;
+  userId: number;
   item: string;
-  display_order: number;
+  displayOrder: number;
   id: number;
 }
 
@@ -14,7 +15,7 @@ class TodoItemsTable {
       [id]
     );
 
-    return result.rows[0] ?? null;
+    return camelcaseKeys(result.rows[0]) ?? null;
   }
 
   async insert(
@@ -22,7 +23,7 @@ class TodoItemsTable {
   ): Promise<number> {
     const result = await pool.query(
       'INSERT INTO todo_items (user_id, item, display_order) values ($1, $2, $3) RETURNING id',
-      [record.user_id, record.item, record.display_order]
+      [record.userId, record.item, record.displayOrder]
     );
 
     return result.rows[0].id;

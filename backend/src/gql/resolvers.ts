@@ -11,11 +11,11 @@ export default {
     },
   },
   Mutation: {
-    addTodoItem: async (_: void, args: { item: string }, ctx: GqlContext) => {
+    addTodoItem: async (_: void, args: { item: string; displayOrder: number }, ctx: GqlContext) => {
       const id = await todoItemsTable.insert({
         item: args.item,
-        display_order: 0,
-        user_id: ctx.user.id,
+        displayOrder: args.displayOrder,
+        userId: ctx.user.id,
       });
 
       return await todoItemsTable.findOne(id);
@@ -34,8 +34,8 @@ export default {
 
       return jwt.sign(
         {
-          first_name: user.first_name,
-          last_name: user.last_name,
+          firstName: user.firstName,
+          lastName: user.lastName,
         },
         environment().jwt.secret,
         {

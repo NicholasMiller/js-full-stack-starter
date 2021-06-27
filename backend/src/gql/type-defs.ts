@@ -13,12 +13,12 @@ export default gql`
   type TodoItem {
     id: Int!
     item: String!
-    display_order: Int!
+    displayOrder: Int!
   }
 
   type Mutation {
     login(email: String!, password: String!): String
-    addTodoItem(item: String!): TodoItem
+    addTodoItem(item: String!, displayOrder: Int!): TodoItem
     removeTodoItem(id: Int!): Void
   }
 `;
