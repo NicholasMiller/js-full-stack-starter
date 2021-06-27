@@ -2,5 +2,9 @@
     "cSpell.words": [
         "jdbc",
         "postgresql"
+    ],
+    "cSpell.ignoreWords": [
+        "camelcase",
+        "keys"
     ]
 }
