@@ -1,0 +1,37 @@
+{
+  "name": "@todo/backend",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=14.0.0",
+    "yarn": ">=1.22"
+  },
+  "main": "dist/index.js",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "apollo-server": "^2.25.0",
+    "dotenv": "^10.0.0",
+    "graphql": "^15.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-liquibase": "^4.1.1",
+    "nodemon": "^2.0.7",
+    "pg": "^8.6.0"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.2",
+    "@types/pg": "^8.6.0",
+    "env-cmd": "^10.1.0",
+    "prettier": "^2.3.1",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.4"
+  },
+  "scripts": {
+    "migrate": "env-cmd node-liquibase --classpath=./node_modules/node-liquibase/dist/drivers/postgresql-42.2.8.jar --url 'jdbc:postgresql://${TODO_APP_DB_HOST}:${TODO_APP_DB_PORT}/${TODO_APP_DB_DATABASE}' --changeLogFile './db-migrations.xml' --username='${TODO_APP_DB_USER}' --password='${TODO_APP_DB_PASSWORD}' update",
+    "start": "yarn services:up && nodemon --config nodemon.json src/index.ts",
+    "start:debug": "yarn services:up && nodemon --config nodemon.json --inspect src/index.ts",
+    "build": "tsc",
+    "services:up": "docker-compose -f ./services/docker-compose.yml --env-file=.env up --detach",
+    "services:down": "docker-compose -f ./services/docker-compose.yml --env-file=.env down",
+    "services:nuke": "docker-compose -f ./services/docker-compose.yml --env-file=.env down --rmi=all"
+  }
+}
