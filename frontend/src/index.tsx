@@ -1,21 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.scss';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { RelayEnvironmentProvider } from 'react-relay';
-import createRelayEnvironment from './create-relay-environment';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import ApplicationShell from './components/ApplicationShell';
+import reportWebVitals from './reportWebVitals';
+
 ReactDOM.render(
-  <RelayEnvironmentProvider environment={createRelayEnvironment()}>
-    <React.StrictMode>
-      <React.Suspense fallback={'Loading...'}>
-        <App />
-      </React.Suspense>
-    </React.StrictMode>
-  </RelayEnvironmentProvider>,
+  <React.StrictMode>
+    <React.Suspense fallback={'Loading...'}>
+      <Router>
+        <ApplicationShell />
+      </Router>
+    </React.Suspense>
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

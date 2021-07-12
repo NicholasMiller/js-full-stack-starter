@@ -18,7 +18,9 @@
     "bootstrap": "^5.0.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-error-boundary": "^3.1.3",
     "react-relay": "^11.0.2",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "reactstrap": "^8.9.0",
     "typescript": "^4.1.2",
@@ -51,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-router-dom": "^5.1.8",
     "@types/relay-runtime": "^11.0.0",
     "apollo": "^2.33.4",
     "babel-plugin-relay": "^11.0.2",
@@ -59,5 +62,10 @@
     "node-sass": "5",
     "relay-compiler": "^11.0.2",
     "relay-compiler-language-typescript": "^14.0.0"
+  },
+  "babelMacros": {
+    "relay": {
+      "artifactDirectory": "./src/__generated__"
+    }
   }
 }
