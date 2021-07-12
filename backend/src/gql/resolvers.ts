@@ -34,26 +34,26 @@ export default {
     }),
   },
   Mutation: {
-    addTodoItem: async (_: void, args: { item: string; displayOrder: number }, ctx: GqlContext) => {
-      const id = await todoItemsTable.insert({
-        item: args.item,
-        displayOrder: args.displayOrder,
-        userId: ctx.user.id,
-      });
+    addTodoItem: withAuthorization(
+      async (_: void, args: { input: { item: string; displayOrder: number } }, ctx: GqlContext) => {
+        const id = await todoItemsTable.insert({
+          item: args.input.item,
+          displayOrder: args.input.displayOrder,
+          userId: ctx.user.id,
+        });
 
-      const todoItem = await todoItemsTable.findOne(id);
-      return !todoItem
-        ? null
-        : {
-            ...todoItem,
-            id: encodeId('Todo', todoItem.id),
-          };
-    },
-    removeTodoItem: (_: void, args: { id: string }, ctx: GqlContext) => {
-      return todoItemsTable.delete(decodeId(args.id).id, ctx.user.id);
-    },
-    login: async (_: void, args: { email: string; password: string }) => {
-      const { email, password } = args;
+        const todoItem = await todoItemsTable.findOne(id);
+        return !todoItem ? null : { ...todoItem, id: encodeId('Todo', todoItem.id) };
+      }
+    ),
+    removeTodoItem: withAuthorization(
+      (_: void, args: { input: { id: string } }, ctx: GqlContext) => {
+        const { id } = args.input;
+        return todoItemsTable.delete(decodeId(id).id, ctx.user.id);
+      }
+    ),
+    login: async (_: void, args: { input: { email: string; password: string } }) => {
+      const { email, password } = args.input;
 
       const user = await usersTable.findOneByEmailAndPassword(email, password);
 

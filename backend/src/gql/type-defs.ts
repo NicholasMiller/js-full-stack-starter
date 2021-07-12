@@ -13,9 +13,19 @@ export default gql`
     todoItems: [TodoItem]
   }
 
+  input LoginMutationInput {
+    email: String!
+    password: String!
+  }
+
+  input AddTodoItemMutationInput {
+    item: String!
+    displayOrder: Int!
+  }
+
   type Mutation {
-    login(email: String!, password: String!): String
-    addTodoItem(item: String!, displayOrder: Int!): TodoItem
+    login(input: LoginMutationInput!): String
+    addTodoItem(input: AddTodoItemMutationInput!): TodoItem
     removeTodoItem(id: String!): Void
   }
 `;
