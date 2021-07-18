@@ -7,29 +7,23 @@
     "yarn": ">=1.22"
   },
   "dependencies": {
+    "@craco/craco": "^6.2.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^12.0.0",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@types/react-relay": "^11.0.1",
-    "bootstrap": "^5.0.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-error-boundary": "^3.1.3",
     "react-relay": "^11.0.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
-    "reactstrap": "^8.9.0",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject",
     "relay": "relay-compiler --src ./src --schema ./schema.graphql --language typescript --artifactDirectory ./src/__generated__ --extensions=ts --extensions=js --extensions=tsx --extensions=jsx",
     "schema": "apollo client:download-schema --endpoint=\"http://localhost:4000\" schema.graphql"
@@ -53,15 +47,23 @@
     ]
   },
   "devDependencies": {
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-relay": "^11.0.1",
     "@types/react-router-dom": "^5.1.8",
     "@types/relay-runtime": "^11.0.0",
     "apollo": "^2.33.4",
+    "autoprefixer": "^9",
     "babel-plugin-relay": "^11.0.2",
     "env-cmd": "^10.1.0",
     "graphql": "^15.5.1",
     "node-sass": "5",
+    "postcss": "^7",
     "relay-compiler": "^11.0.2",
-    "relay-compiler-language-typescript": "^14.0.0"
+    "relay-compiler-language-typescript": "^14.0.0",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },
   "babelMacros": {
     "relay": {

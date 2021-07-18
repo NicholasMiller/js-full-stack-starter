@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay';
-import { TodoListQuery } from './__generated__/TodoListQuery.graphql';
+import { TodoListQuery } from '../__generated__/TodoListQuery.graphql';
 
 function TodoList() {
   const data = useLazyLoadQuery<TodoListQuery>(

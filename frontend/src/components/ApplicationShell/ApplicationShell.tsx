@@ -1,34 +1,35 @@
 import * as React from 'react';
-import { Navbar, NavbarBrand } from 'reactstrap';
 import { Switch, Route, useHistory } from 'react-router-dom';
-import TodoList from '../../TodoList';
+import TodoList from '../TodoList';
 import { RelayEnvironmentProvider } from 'react-relay';
-import createRelayEnvironment from '../../createRelayEnvironment';
+import createRelayEnvironment, { storeAuthorizationToken } from '../../createRelayEnvironment';
 import Login from '../Login';
+import type RelayModernEnvironment from 'relay-runtime/lib/store/RelayModernEnvironment';
 
 function ApplicationShell() {
   const history = useHistory();
+  const [environment, setEnvironment] = React.useState<RelayModernEnvironment>(
+    createRelayEnvironment({ onAuthFailure: () => history.push('/login') })
+  );
   return (
-    <RelayEnvironmentProvider
-      environment={createRelayEnvironment({
-        onAuthFailure: () => {
-          history.push('/login');
-        },
-      })}
-    >
-      <div className="container">
-        <Navbar color="light" light expand="md">
-          <NavbarBrand>Todo App</NavbarBrand>
-        </Navbar>
-        <Switch>
-          <Route exact path="/">
-            <TodoList />
-          </Route>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-        </Switch>
-      </div>
+    <RelayEnvironmentProvider environment={environment}>
+      <Switch>
+        <Route exact path="/">
+          <TodoList />
+        </Route>
+        <Route exact path="/login">
+          <Login
+            onAuth={(token) => {
+              storeAuthorizationToken(token);
+              setEnvironment(
+                createRelayEnvironment({ onAuthFailure: () => history.push('/login') })
+              );
+
+              history.push('/');
+            }}
+          />
+        </Route>
+      </Switch>
     </RelayEnvironmentProvider>
   );
 }

@@ -8,14 +8,15 @@ export interface GqlContext {
 }
 
 export default async ({ req }): Promise<GqlContext> => {
-  const token = req.headers.authorization || '';
+  const authorization = req.headers.authorization;
+  const matches = /^Bearer (.*)$/i.exec(authorization);
 
-  if (!token) {
+  if (!matches) {
     return { user: null };
   }
 
   try {
-    const payload = jwt.verify(token, environment().jwt.secret);
+    const payload = jwt.verify(matches[1], environment().jwt.secret);
     return typeof payload === 'object'
       ? { user: await userTable.findOneByEmail(payload.sub) }
       : { user: null };
