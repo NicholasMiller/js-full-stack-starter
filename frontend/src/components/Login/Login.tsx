@@ -3,7 +3,6 @@ import { graphql } from 'babel-plugin-relay/macro';
 import { useMutation } from 'react-relay';
 import type { LoginMutation } from '../../__generated__/LoginMutation.graphql';
 import Logo from '../Logo';
-import { useHistory } from 'react-router-dom';
 
 const LoginErrorAlert = () => (
   <div
