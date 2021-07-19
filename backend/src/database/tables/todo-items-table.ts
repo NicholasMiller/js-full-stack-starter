@@ -4,7 +4,7 @@ import camelcaseKeys from 'camelcase-keys';
 export interface TodoItemsTableRecord {
   userId: number;
   item: string;
-  displayOrder: number;
+  createdAt: Date;
   id: number;
 }
 
@@ -20,7 +20,7 @@ class TodoItemsTable {
 
   async findByUserId(userId: number): Promise<Array<TodoItemsTableRecord>> {
     const result = await pool.query<TodoItemsTableRecord>(
-      'SELECT * FROM todo_items WHERE user_id = $1',
+      'SELECT * FROM todo_items WHERE user_id = $1 ORDER BY created_at',
       [userId]
     );
 
@@ -28,11 +28,11 @@ class TodoItemsTable {
   }
 
   async insert(
-    record: Pick<TodoItemsTableRecord, Exclude<keyof TodoItemsTableRecord, 'id'>>
+    record: Pick<TodoItemsTableRecord, Exclude<keyof TodoItemsTableRecord, 'id' | 'createdAt'>>
   ): Promise<number> {
     const result = await pool.query(
-      'INSERT INTO todo_items (user_id, item, display_order) values ($1, $2, $3) RETURNING id',
-      [record.userId, record.item, record.displayOrder]
+      'INSERT INTO todo_items (user_id, item) values ($1, $2) RETURNING id',
+      [record.userId, record.item]
     );
 
     return result.rows[0].id;

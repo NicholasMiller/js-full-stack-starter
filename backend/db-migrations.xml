@@ -4,6 +4,7 @@
   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
          http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd">
 
+  <property name="now" value="now()" dbms="postgresql"/>
 
   <changeSet id="1" author="Nick Miller">
     <createTable tableName="users">
@@ -34,7 +35,7 @@
       <column name="item" type="varchar">
         <constraints nullable="false"/>
       </column>
-      <column name="display_order" type="int">
+      <column name="created_at" type="timestamp with time zone" defaultValue="now()">
         <constraints nullable="false"/>
       </column>
     </createTable>

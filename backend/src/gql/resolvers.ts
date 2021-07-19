@@ -35,10 +35,9 @@ export default {
   },
   Mutation: {
     addTodoItem: withAuthorization(
-      async (_: void, args: { input: { item: string; displayOrder: number } }, ctx: GqlContext) => {
+      async (_: void, args: { input: { item: string } }, ctx: GqlContext) => {
         const id = await todoItemsTable.insert({
           item: args.input.item,
-          displayOrder: args.input.displayOrder,
           userId: ctx.user.id,
         });
 

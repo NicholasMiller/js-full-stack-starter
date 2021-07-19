@@ -2,11 +2,12 @@ import { gql } from 'apollo-server';
 
 export default gql`
   scalar Void
+  scalar DateTime
 
   type TodoItem {
     id: String!
     item: String!
-    displayOrder: Int!
+    createdAt: DateTime!
   }
 
   type Query {
@@ -20,7 +21,6 @@ export default gql`
 
   input AddTodoItemMutationInput {
     item: String!
-    displayOrder: Int!
   }
 
   type Mutation {

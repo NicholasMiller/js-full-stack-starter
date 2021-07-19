@@ -38,13 +38,11 @@ const fetchQueryWithAuthFailureHandling = (onAuthFailure: (error: any) => void) 
     // property of the response. If any exceptions occurred when processing the request,
     // throw an error to indicate to the developer what went wrong.
     if (Array.isArray(json.errors)) {
-      debugger;
       if (json.errors[0]?.extensions?.code === 'FORBIDDEN') {
         clearAuthorizationToken();
         onAuthFailure(json.errors[0]);
       }
 
-      debugger;
       throw new Error(
         `Errorzzz fetching GraphQL query '${operation.name}' with variables '${JSON.stringify(
           variables

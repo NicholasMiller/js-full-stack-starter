@@ -36,10 +36,12 @@ directive @connection(
 
 scalar Void
 
+scalar Date
+
 type TodoItem {
   id: String!
   item: String!
-  displayOrder: Int!
+  createdAt: Date!
 }
 
 type Query {
@@ -53,7 +55,6 @@ input LoginMutationInput {
 
 input AddTodoItemMutationInput {
   item: String!
-  displayOrder: Int!
 }
 
 type Mutation {
