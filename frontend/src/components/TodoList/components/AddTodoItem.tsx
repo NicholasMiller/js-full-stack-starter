@@ -54,7 +54,7 @@ export default function AddTodoItem() {
             disabled={!todoText.trim() || isInFlight}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
           >
-            Login
+            Add Item
           </button>
         </div>
       </form>

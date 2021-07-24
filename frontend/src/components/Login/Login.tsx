@@ -54,14 +54,13 @@ export default function Login({ onAuth }: LoginProps) {
     <div className="items-center justify-center flex min-h-screen">
       <div className="w-96 justify-center flex flex-col">
         <form onSubmit={onSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <Logo className="m-auto mb-4 mt-4" width={80} />
+          <Logo className="m-auto mb-4 mt-4" height={100} width={100} />
           {isLoginError ? <LoginErrorAlert /> : null}
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
             <input
               onChange={(evt) => setEmail(evt.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
               type="email"
               placeholder="user@example.com"
             />
@@ -71,7 +70,6 @@ export default function Login({ onAuth }: LoginProps) {
             <input
               onChange={(evt) => setPassword(evt.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
               type="password"
             />
           </div>

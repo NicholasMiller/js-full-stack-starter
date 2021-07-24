@@ -11,7 +11,7 @@ export const storeAuthorizationToken = (token: string): void => {
   console.log(`SET LOCAL STORAGE ${LOCAL_STORAGE_TOKEN_KEY} to ${token}`);
 };
 
-const clearAuthorizationToken = () => {
+export const clearAuthorizationToken = () => {
   authorizationToken = null;
   window.localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, '');
 };
@@ -38,13 +38,14 @@ const fetchQueryWithAuthFailureHandling = (onAuthFailure: (error: any) => void) 
     // property of the response. If any exceptions occurred when processing the request,
     // throw an error to indicate to the developer what went wrong.
     if (Array.isArray(json.errors)) {
-      if (json.errors[0]?.extensions?.code === 'FORBIDDEN') {
+      const code = json.errors[0]?.extensions?.code;
+      if (['FORBIDDEN', 'UNAUTHENTICATED'].includes(code)) {
         clearAuthorizationToken();
         onAuthFailure(json.errors[0]);
       }
 
       throw new Error(
-        `Errorzzz fetching GraphQL query '${operation.name}' with variables '${JSON.stringify(
+        `Error fetching GraphQL query '${operation.name}' with variables '${JSON.stringify(
           variables
         )}': ${JSON.stringify(json.errors)}`
       );

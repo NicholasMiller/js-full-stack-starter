@@ -32,7 +32,8 @@
     "start:debug": "yarn services:up && nodemon --config nodemon.json --inspect src/index.ts",
     "build": "tsc",
     "services:up": "docker-compose -f ./services/docker-compose.yml --env-file=.env up --detach",
-    "services:down": "docker-compose -f ./services/docker-compose.yml --env-file=.env down",
-    "services:nuke": "docker-compose -f ./services/docker-compose.yml --env-file=.env down --rmi=all"
+    "services:stop": "docker-compose -f ./services/docker-compose.yml --env-file=.env stop",
+    "services:reset": "yarn services:nuke && yarn services:up",
+    "services:nuke": "docker-compose -f ./services/docker-compose.yml --env-file=.env down"
   }
 }

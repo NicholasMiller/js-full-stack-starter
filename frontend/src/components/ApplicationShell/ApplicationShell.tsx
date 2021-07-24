@@ -5,6 +5,7 @@ import { RelayEnvironmentProvider } from 'react-relay';
 import createRelayEnvironment, { storeAuthorizationToken } from '../../createRelayEnvironment';
 import Login from '../Login';
 import type RelayModernEnvironment from 'relay-runtime/lib/store/RelayModernEnvironment';
+import Navigation from '../Navigation';
 
 function ApplicationShell() {
   const history = useHistory();
@@ -15,6 +16,7 @@ function ApplicationShell() {
     <RelayEnvironmentProvider environment={environment}>
       <Switch>
         <Route exact path="/">
+          <Navigation />
           <TodoList />
         </Route>
         <Route exact path="/login">

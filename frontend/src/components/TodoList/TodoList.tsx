@@ -2,7 +2,7 @@ import * as React from 'react';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay';
 import { TodoListQuery } from '../../__generated__/TodoListQuery.graphql';
-import TodoItem from './components/TodoItem';
+import TodoItem from './components/TodoItem/TodoItem';
 import AddTodoItem from './components/AddTodoItem';
 
 function TodoList() {

@@ -4,14 +4,22 @@ export default gql`
   scalar Void
   scalar DateTime
 
+  type Viewer {
+    firstName: String!
+    lastName: String!
+    email: String!
+    profilePhotoUrl: String
+  }
+
   type TodoItem {
-    id: String!
+    id: ID!
     item: String!
     createdAt: DateTime!
   }
 
   type Query {
     todoItems: [TodoItem]
+    viewer: Viewer
   }
 
   input LoginMutationInput {
@@ -23,9 +31,13 @@ export default gql`
     item: String!
   }
 
+  input CompleteTodoItemMutationInput {
+    id: ID!
+  }
+
   type Mutation {
     login(input: LoginMutationInput!): String
     addTodoItem(input: AddTodoItemMutationInput!): TodoItem
-    removeTodoItem(id: String!): Void
+    completeTodoItem(id: ID!): TodoItem
   }
 `;

@@ -38,13 +38,13 @@ class TodoItemsTable {
     return result.rows[0].id;
   }
 
-  async delete(id: number, userId: number): Promise<boolean> {
+  async complete(id: number, userId: number): Promise<TodoItemsTableRecord | null> {
     const result = await pool.query(
-      'DELETE FROM todo_items WHERE id = $1 AND user_id = $2 RETURNING id;',
+      'UPDATE todo_items SET completed_at = NOW() WHERE id = $1 AND user_id = $2 RETURNING *',
       [id, userId]
     );
 
-    return result.rowCount > 0;
+    return camelcaseKeys(result.rows[0]) ?? null;
   }
 }
 

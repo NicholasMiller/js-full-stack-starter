@@ -4,8 +4,6 @@
   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
          http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd">
 
-  <property name="now" value="now()" dbms="postgresql"/>
-
   <changeSet id="1" author="Nick Miller">
     <createTable tableName="users">
       <column name="id" type="int" autoIncrement="true">
@@ -23,6 +21,7 @@
       <column name="email" type="varchar">
         <constraints nullable="false" unique="true" uniqueConstraintName="users_email_ix1"/>
       </column>
+      <column name="profile_photo_url" type="varchar" />
     </createTable>
 
     <createTable tableName="todo_items">
@@ -38,13 +37,14 @@
       <column name="created_at" type="timestamp with time zone" defaultValue="now()">
         <constraints nullable="false"/>
       </column>
+      <column name="completed_at" type="timestamp with time zone" />
     </createTable>
 
     <sql>
       INSERT INTO users 
-        (first_name, last_name, password, email)
+        (first_name, last_name, password, email, profile_photo_url)
         VALUES 
-        ('Testing', 'User', crypt('testing', gen_salt('bf', 8)), 'user@test.com')
+        ('Ada', 'Lovelace', crypt('abc123', gen_salt('bf', 8)), 'ada@example.com', 'https://www.stylist.co.uk/images/app/uploads/2018/10/09155947/ada-lovelace-day-2018-quotes-facts-biography-crop-1539097197-1366x1366.jpg?w=256&amp;h=256&amp;fit=max&amp;auto=format%2Ccompress')
     </sql>
 
 

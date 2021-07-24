@@ -32,6 +32,11 @@ export default {
 
       return items;
     }),
+    viewer: withAuthorization(async (_: any, __: any, ctx: GqlContext) => {
+      const user = await usersTable.findOneByEmail(ctx.user.email);
+
+      return user;
+    }),
   },
   Mutation: {
     addTodoItem: withAuthorization(
@@ -45,10 +50,10 @@ export default {
         return !todoItem ? null : { ...todoItem, id: encodeId('Todo', todoItem.id) };
       }
     ),
-    removeTodoItem: withAuthorization(
+    completeTodoItem: withAuthorization(
       (_: void, args: { input: { id: string } }, ctx: GqlContext) => {
         const { id } = args.input;
-        return todoItemsTable.delete(decodeId(id).id, ctx.user.id);
+        return todoItemsTable.complete(decodeId(id).id, ctx.user.id);
       }
     ),
     login: async (_: void, args: { input: { email: string; password: string } }) => {
