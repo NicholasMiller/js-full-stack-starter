@@ -25,7 +25,7 @@ const decodeId = (encodedId: string) => {
 export default {
   Query: {
     todoItems: withAuthorization(async (_: any, __: any, ctx: GqlContext) => {
-      const items = (await todoItemsTable.findByUserId(ctx.user.id)).map((item) => ({
+      const items = (await todoItemsTable.findIncompleteByUserId(ctx.user.id)).map((item) => ({
         ...item,
         id: encodeId('Todo', item.id),
       }));
@@ -51,9 +51,11 @@ export default {
       }
     ),
     completeTodoItem: withAuthorization(
-      (_: void, args: { input: { id: string } }, ctx: GqlContext) => {
+      async (_: void, args: { input: { id: string } }, ctx: GqlContext) => {
         const { id } = args.input;
-        return todoItemsTable.complete(decodeId(id).id, ctx.user.id);
+        const todoItem = await todoItemsTable.complete(decodeId(id).id, ctx.user.id);
+
+        return !todoItem ? null : { ...todoItem, id: encodeId('Todo', todoItem.id) };
       }
     ),
     login: async (_: void, args: { input: { email: string; password: string } }) => {

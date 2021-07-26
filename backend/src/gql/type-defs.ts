@@ -38,6 +38,6 @@ export default gql`
   type Mutation {
     login(input: LoginMutationInput!): String
     addTodoItem(input: AddTodoItemMutationInput!): TodoItem
-    completeTodoItem(id: ID!): TodoItem
+    completeTodoItem(input: CompleteTodoItemMutationInput!): TodoItem
   }
 `;

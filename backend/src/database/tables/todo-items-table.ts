@@ -18,9 +18,11 @@ class TodoItemsTable {
     return camelcaseKeys(result.rows[0]) ?? null;
   }
 
-  async findByUserId(userId: number): Promise<Array<TodoItemsTableRecord>> {
+  async findIncompleteByUserId(userId: number): Promise<Array<TodoItemsTableRecord>> {
     const result = await pool.query<TodoItemsTableRecord>(
-      'SELECT * FROM todo_items WHERE user_id = $1 ORDER BY created_at',
+      'SELECT * FROM todo_items ' +
+        'WHERE user_id = $1 AND completed_at IS NULL ' +
+        'ORDER BY created_at',
       [userId]
     );
 
@@ -31,7 +33,7 @@ class TodoItemsTable {
     record: Pick<TodoItemsTableRecord, Exclude<keyof TodoItemsTableRecord, 'id' | 'createdAt'>>
   ): Promise<number> {
     const result = await pool.query(
-      'INSERT INTO todo_items (user_id, item) values ($1, $2) RETURNING id',
+      'INSERT INTO todo_items (user_id, item) VALUES ($1, $2) RETURNING id',
       [record.userId, record.item]
     );
 

@@ -2,7 +2,7 @@
   "name": "@todo/backend",
   "version": "1.0.0",
   "engines": {
-    "node": ">=14.0.0",
+    "node": "^14.15.0",
     "yarn": ">=1.22"
   },
   "main": "dist/index.js",
@@ -14,26 +14,44 @@
     "dotenv": "^10.0.0",
     "graphql": "^15.5.0",
     "jsonwebtoken": "^8.5.1",
-    "node-liquibase": "^4.1.1",
     "nodemon": "^2.0.7",
     "pg": "^8.6.0"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "@babel/preset-env": "^7.14.8",
+    "@types/dotenv": "^8.2.0",
     "@types/jsonwebtoken": "^8.5.2",
     "@types/pg": "^8.6.0",
+    "babel-jest": "^27.0.6",
     "env-cmd": "^10.1.0",
+    "faker": "^5.5.3",
+    "jest": "^27.0.6",
+    "liquibase": "^4.4.0",
     "prettier": "^2.3.1",
+    "ts-jest": "^27.0.4",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.4"
   },
   "scripts": {
-    "migrate": "env-cmd node-liquibase --classpath=./node_modules/node-liquibase/dist/drivers/postgresql-42.2.8.jar --url 'jdbc:postgresql://${TODO_APP_DB_HOST}:${TODO_APP_DB_PORT}/${TODO_APP_DB_DATABASE}' --changeLogFile './db-migrations.xml' --username='${TODO_APP_DB_USER}' --password='${TODO_APP_DB_PASSWORD}' update",
+    "migrate": "env-cmd node-liquibase --classpath=./node_modules/liquibase/dist/drivers/postgresql-42.2.8.jar --url 'jdbc:postgresql://${TODO_APP_DB_HOST}:${TODO_APP_DB_PORT}/${TODO_APP_DB_DATABASE}' --changeLogFile './db-migrations.xml' --username='${TODO_APP_DB_USER}' --password='${TODO_APP_DB_PASSWORD}' update",
     "start": "yarn services:up && nodemon --config nodemon.json src/index.ts",
     "start:debug": "yarn services:up && nodemon --config nodemon.json --inspect src/index.ts",
     "build": "tsc",
     "services:up": "docker-compose -f ./services/docker-compose.yml --env-file=.env up --detach",
     "services:stop": "docker-compose -f ./services/docker-compose.yml --env-file=.env stop",
-    "services:reset": "yarn services:nuke && yarn services:up",
-    "services:nuke": "docker-compose -f ./services/docker-compose.yml --env-file=.env down"
+    "services:nuke": "docker-compose -f ./services/docker-compose.yml --env-file=.env down",
+    "test:services:up": "docker-compose -f ./services/docker-compose.yml --env-file=.env.testing up --detach",
+    "test:services:down": "docker-compose -f ./services/docker-compose.yml --env-file=.env.testing down",
+    "test": "jest"
+  },
+  "jest": {
+    "globalSetup": "./src/test-global-setup.ts",
+    "globalTeardown": "./src/test-global-teardown.ts",
+    "preset": "ts-jest",
+    "transform": {
+      "^.+\\.(ts|tsx)?$": "ts-jest",
+      "^.+\\.(js|jsx)$": "babel-jest"
+    }
   }
 }
