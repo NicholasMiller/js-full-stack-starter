@@ -53,8 +53,8 @@ export default {
     completeTodoItem: withAuthorization(
       async (_: void, args: { input: { id: string } }, ctx: GqlContext) => {
         const { id } = args.input;
-        const todoItem = await todoItemsTable.complete(decodeId(id).id, ctx.user.id);
 
+        const todoItem = await todoItemsTable.complete(decodeId(id).id, ctx.user.id);
         return !todoItem ? null : { ...todoItem, id: encodeId('Todo', todoItem.id) };
       }
     ),

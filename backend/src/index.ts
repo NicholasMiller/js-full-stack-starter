@@ -2,5 +2,14 @@ import { initEnvironment } from './environment';
 initEnvironment();
 
 import server from './gql/server';
+import dbConnection from './database/db-connection';
 
-server.listen().then(({ url }) => console.log(`Server ready at ${url}.`));
+const startup = async () => {
+  const migration = await dbConnection.migrate.latest();
+  console.log('DB migration run to ' + migration);
+
+  const { url } = await server.listen();
+  console.log(`Server ready at ${url}.`);
+};
+
+startup();

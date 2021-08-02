@@ -9,32 +9,34 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "apollo-server": "^2.25.0",
-    "camelcase-keys": "^7.0.0",
+    "@apollo/client": "^3.4.1",
+    "apollo-server": "^3.1.1",
     "dotenv": "^10.0.0",
-    "graphql": "^15.5.0",
+    "graphql": "^15.5.1",
     "jsonwebtoken": "^8.5.1",
+    "knex": "^0.95.9",
+    "knex-stringcase": "^1.4.5",
     "nodemon": "^2.0.7",
-    "pg": "^8.6.0"
+    "pg": "^8.7.1"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.14.5",
     "@babel/preset-env": "^7.14.8",
     "@types/dotenv": "^8.2.0",
+    "@types/jest": "^26.0.24",
     "@types/jsonwebtoken": "^8.5.2",
     "@types/pg": "^8.6.0",
     "babel-jest": "^27.0.6",
+    "cross-fetch": "^3.1.4",
     "env-cmd": "^10.1.0",
     "faker": "^5.5.3",
     "jest": "^27.0.6",
-    "liquibase": "^4.4.0",
     "prettier": "^2.3.1",
     "ts-jest": "^27.0.4",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.4"
   },
   "scripts": {
-    "migrate": "env-cmd node-liquibase --classpath=./node_modules/liquibase/dist/drivers/postgresql-42.2.8.jar --url 'jdbc:postgresql://${TODO_APP_DB_HOST}:${TODO_APP_DB_PORT}/${TODO_APP_DB_DATABASE}' --changeLogFile './db-migrations.xml' --username='${TODO_APP_DB_USER}' --password='${TODO_APP_DB_PASSWORD}' update",
     "start": "yarn services:up && nodemon --config nodemon.json src/index.ts",
     "start:debug": "yarn services:up && nodemon --config nodemon.json --inspect src/index.ts",
     "build": "tsc",
@@ -43,7 +45,7 @@
     "services:nuke": "docker-compose -f ./services/docker-compose.yml --env-file=.env down",
     "test:services:up": "docker-compose -f ./services/docker-compose.yml --env-file=.env.testing up --detach",
     "test:services:down": "docker-compose -f ./services/docker-compose.yml --env-file=.env.testing down",
-    "test": "jest"
+    "test": "jest --forceExit"
   },
   "jest": {
     "globalSetup": "./src/test-global-setup.ts",

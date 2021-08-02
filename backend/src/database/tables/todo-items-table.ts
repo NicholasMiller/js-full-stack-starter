@@ -1,52 +1,52 @@
-import pool from '../db-pool';
-import camelcaseKeys from 'camelcase-keys';
+import dbConnection from '../db-connection';
 
 export interface TodoItemsTableRecord {
   userId: number;
   item: string;
   createdAt: Date;
+  completedAt: Date;
   id: number;
 }
 
+const TABLE_NAME = 'todo_items';
+const table = <T = TodoItemsTableRecord[]>() => dbConnection<TodoItemsTableRecord, T>(TABLE_NAME);
+
 class TodoItemsTable {
   async findOne(id: number): Promise<TodoItemsTableRecord | null> {
-    const result = await pool.query<TodoItemsTableRecord>(
-      'SELECT * FROM todo_items WHERE id = $1',
-      [id]
-    );
+    const result = await table().select('*').where('id', id).first();
 
-    return camelcaseKeys(result.rows[0]) ?? null;
+    return result ?? null;
   }
 
   async findIncompleteByUserId(userId: number): Promise<Array<TodoItemsTableRecord>> {
-    const result = await pool.query<TodoItemsTableRecord>(
-      'SELECT * FROM todo_items ' +
-        'WHERE user_id = $1 AND completed_at IS NULL ' +
-        'ORDER BY created_at',
-      [userId]
-    );
+    const results = await table()
+      .select('*')
+      .where('user_id', userId)
+      .whereNull('completed_at')
+      .orderBy('created_at');
 
-    return result.rows.map((row) => camelcaseKeys(row));
+    return results;
   }
 
   async insert(
-    record: Pick<TodoItemsTableRecord, Exclude<keyof TodoItemsTableRecord, 'id' | 'createdAt'>>
+    record: Pick<
+      TodoItemsTableRecord,
+      Exclude<keyof TodoItemsTableRecord, 'id' | 'createdAt' | 'completedAt'>
+    >
   ): Promise<number> {
-    const result = await pool.query(
-      'INSERT INTO todo_items (user_id, item) VALUES ($1, $2) RETURNING id',
-      [record.userId, record.item]
-    );
+    const [id] = await table<number>().insert(record).returning('id');
 
-    return result.rows[0].id;
+    return id;
   }
 
   async complete(id: number, userId: number): Promise<TodoItemsTableRecord | null> {
-    const result = await pool.query(
-      'UPDATE todo_items SET completed_at = NOW() WHERE id = $1 AND user_id = $2 RETURNING *',
-      [id, userId]
-    );
+    const [record] = await table()
+      .update({ completedAt: dbConnection.raw('now()') })
+      .where('id', id)
+      .where('user_id', userId)
+      .returning('*');
 
-    return camelcaseKeys(result.rows[0]) ?? null;
+    return record ?? null;
   }
 }
 

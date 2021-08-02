@@ -1,55 +1,61 @@
-import pool from '../db-pool';
-import camelcaseKeys from 'camelcase-keys';
+import dbConnection from '../db-connection';
 
 export interface UsersTableRecord {
+  id: number;
   firstName: string | null;
   lastName: string | null;
   email: string;
-  id: number;
   profilePhotoUrl: string | null;
   password: string;
 }
 
-class UsersTable {
-  async insert(record: UsersTableRecord): Promise<number> {
-    const result = await pool.query<UsersTableRecord>(
-      'INSERT INTO USERS ' +
-        '(first_name, last_name, email, profile_photo_url, password) ' +
-        "VALUES ($1, $2, $3, $4, crypt($5, gen_salt('bf', 8))) " +
-        'RETURNING id',
-      [record.firstName, record.lastName, record.email, record.profilePhotoUrl, record.password]
-    );
+const TABLE_NAME = 'users';
+const table = () => dbConnection<UsersTableRecord>(TABLE_NAME);
+const cryptPassword = (password) => dbConnection.raw(`crypt(?, gen_salt('bf', 8))`, [password]);
 
-    return result.rows[0].id;
+class UsersTable {
+  async insert(
+    record: Pick<UsersTableRecord, Exclude<keyof UsersTableRecord, 'id'>>
+  ): Promise<number> {
+    const [userId] = await table()
+      .insert({
+        firstName: record.firstName,
+        lastName: record.lastName,
+        email: record.email,
+        profilePhotoUrl: record.profilePhotoUrl,
+        password: cryptPassword(record.password),
+      })
+      .returning<number[]>('id');
+
+    return userId;
   }
 
   async setPassword(id: number, password: string): Promise<boolean> {
-    const result = await pool.query<UsersTableRecord>(
-      "UPDATE USERS SET password = crypt($2, gen_salt('bf', 8)) WHERE id = $1",
-      [id, password]
-    );
+    const result = await table()
+      .update({
+        password: cryptPassword(password),
+      })
+      .where('id', id);
 
-    return result.rowCount > 0;
+    return result > 0;
   }
 
   async findOneByEmail(email: string): Promise<UsersTableRecord | null> {
-    const result = await pool.query<UsersTableRecord>('SELECT * FROM users WHERE email = $1', [
-      email,
-    ]);
+    const user = await table().where('email', email).first();
 
-    return result.rows[0] ? camelcaseKeys(result.rows[0]) : null;
+    return user ?? null;
   }
 
   async findOneByEmailAndPassword(
     email: string,
     password: string
   ): Promise<UsersTableRecord | null> {
-    const result = await pool.query<UsersTableRecord | null>(
-      'SELECT * FROM users WHERE email = $1 AND password = crypt($2, password)',
-      [email, password]
-    );
+    const user = await table()
+      .where('email', email)
+      .where('password', dbConnection.raw(`crypt(?, "password")`, [password]))
+      .first();
 
-    return result.rows[0] ?? null;
+    return user ?? null;
   }
 }
 

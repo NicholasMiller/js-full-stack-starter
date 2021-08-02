@@ -17,9 +17,12 @@ export default async ({ req }): Promise<GqlContext> => {
 
   try {
     const payload = jwt.verify(matches[1], environment().jwt.secret);
-    return typeof payload === 'object'
-      ? { user: await userTable.findOneByEmail(payload.sub) }
-      : { user: null };
+    const context =
+      typeof payload === 'object'
+        ? { user: await userTable.findOneByEmail(payload.sub) }
+        : { user: null };
+
+    return context;
   } catch (ex) {
     throw new AuthenticationError('Your JWT token is invalid');
   }
