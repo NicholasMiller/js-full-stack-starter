@@ -31,6 +31,7 @@
     "env-cmd": "^10.1.0",
     "faker": "^5.5.3",
     "jest": "^27.0.6",
+    "nyc": "^15.1.0",
     "prettier": "^2.3.1",
     "ts-jest": "^27.0.4",
     "ts-node": "^10.0.0",
@@ -45,7 +46,8 @@
     "services:nuke": "docker-compose -f ./services/docker-compose.yml --env-file=.env down",
     "test:services:up": "docker-compose -f ./services/docker-compose.yml --env-file=.env.testing up --detach",
     "test:services:down": "docker-compose -f ./services/docker-compose.yml --env-file=.env.testing down",
-    "test": "jest --forceExit"
+    "test": "jest --forceExit",
+    "test:coverage": "nyc --reporter=lcov --reporter=text-summary jest --forceExit"
   },
   "jest": {
     "globalSetup": "./src/test-global-setup.ts",
@@ -54,6 +56,9 @@
     "transform": {
       "^.+\\.(ts|tsx)?$": "ts-jest",
       "^.+\\.(js|jsx)$": "babel-jest"
-    }
+    },
+    "collectCoverageFrom": [
+      "src/**/*.{ts,js}"
+    ]
   }
 }
