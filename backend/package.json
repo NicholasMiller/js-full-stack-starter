@@ -44,8 +44,6 @@
     "services:up": "docker-compose -f ./services/docker-compose.yml --env-file=.env up --detach",
     "services:stop": "docker-compose -f ./services/docker-compose.yml --env-file=.env stop",
     "services:nuke": "docker-compose -f ./services/docker-compose.yml --env-file=.env down",
-    "test:services:up": "docker-compose -f ./services/docker-compose.yml --env-file=.env.testing up --detach",
-    "test:services:down": "docker-compose -f ./services/docker-compose.yml --env-file=.env.testing down",
     "test": "jest --forceExit",
     "test:coverage": "nyc --reporter=lcov --reporter=text-summary jest --forceExit"
   },

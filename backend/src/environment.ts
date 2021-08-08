@@ -1,16 +1,7 @@
 import dotenv from 'dotenv';
 import fs from 'fs';
-import path from 'path';
-
 export const initEnvironment = () => {
   dotenv.config();
-};
-
-export const initTestingEnvironment = () => {
-  const envConfig = dotenv.parse(fs.readFileSync(path.join(__dirname, '..', '.env.testing')));
-  for (const k in envConfig) {
-    process.env[k] = envConfig[k];
-  }
 };
 
 export default () => ({
@@ -28,6 +19,6 @@ export default () => ({
     host: process.env.TODO_APP_SERVER_CORS,
   },
   server: {
-    port: process.env.TODO_APP_SERVER_PORT,
+    port: process.env.TODO_APP_GQL_PORT,
   },
 });

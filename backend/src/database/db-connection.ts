@@ -1,5 +1,4 @@
 import knex from 'knex';
-import { Pool } from 'pg';
 import environment from '../environment';
 import knexStringcase from 'knex-stringcase';
 

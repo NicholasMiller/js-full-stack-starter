@@ -10,7 +10,7 @@ const client = new ApolloClient({
 });
 
 describe('JWT', () => {
-  it('issues a JWT when a correct username and password is provided', async () => {
+  it('issues a JWT when a correct username and password are provided', async () => {
     const email = faker.internet.email();
     const password = faker.internet.password();
 
