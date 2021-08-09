@@ -1,7 +1,7 @@
 import faker from 'faker';
-import usersTable from '../../database/tables/users-table';
+import usersTable from '../../../../database/tables/users-table';
 import { ApolloClient, InMemoryCache, gql, HttpLink } from '@apollo/client/core';
-import environment from '../../environment';
+import environment from '../../../../environment';
 import fetch from 'cross-fetch';
 
 const client = new ApolloClient({
@@ -9,7 +9,7 @@ const client = new ApolloClient({
   link: new HttpLink({ uri: `http://127.0.0.1:${environment().server.port}`, fetch }),
 });
 
-describe('JWT', () => {
+describe('Graph / Mutations / Login', () => {
   it('issues a JWT when a correct username and password are provided', async () => {
     const email = faker.internet.email();
     const password = faker.internet.password();

@@ -5,6 +5,7 @@ export default gql`
   scalar DateTime
 
   type Viewer {
+    id: ID!
     firstName: String!
     lastName: String!
     email: String!
@@ -15,6 +16,8 @@ export default gql`
     id: ID!
     item: String!
     createdAt: DateTime!
+    completedAt: DateTime
+    userId: ID!
   }
 
   type Query {
