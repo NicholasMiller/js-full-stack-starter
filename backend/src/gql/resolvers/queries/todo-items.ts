@@ -8,6 +8,7 @@ export default {
     const items = (await todoItemsTable.findIncompleteByUserId(ctx.user.id)).map((item) => ({
       ...item,
       id: encodeId('Todo', item.id),
+      userId: encodeId('User', item.userId),
     }));
 
     return items;

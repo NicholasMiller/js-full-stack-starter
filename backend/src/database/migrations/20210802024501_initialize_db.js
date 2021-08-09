@@ -16,7 +16,7 @@ exports.up = async (knex) => {
     table.bigInteger('user_id').notNullable();
     table.string('item').notNullable();
     table.dateTime('created_at').defaultTo(knex.fn.now());
-    table.string('completed_at').defaultTo(knex.fn.now());
+    table.string('completed_at');
   });
 
   await knex('users').insert({

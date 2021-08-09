@@ -17,6 +17,7 @@ export default async ({ req }): Promise<GqlContext> => {
 
   try {
     const payload = jwt.verify(matches[1], environment().jwt.secret);
+
     const context =
       typeof payload === 'object'
         ? { user: await userTable.findOneByEmail(payload.sub) }

@@ -1,4 +1,4 @@
-/* This example requires Tailwind CSS v2.0+ */
+import * as React from 'react';
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { graphql } from 'babel-plugin-relay/macro';
@@ -8,13 +8,7 @@ import { useHistory } from 'react-router-dom';
 import Logo from './Logo';
 import { useLazyLoadQuery } from 'react-relay';
 import { NavigationQuery } from '../__generated__/NavigationQuery.graphql';
-
-const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-];
+import AboutModal from './AboutModal';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -35,6 +29,7 @@ export default function Navigation() {
     {}
   );
 
+  const [isAboutModalVisible, setAboutModalVisible] = React.useState<boolean>(false);
   const history = useHistory();
 
   const { viewer } = data;
@@ -67,21 +62,14 @@ export default function Navigation() {
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? 'bg-gray-900 text-white'
-                            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                          'px-3 py-2 rounded-md text-sm font-medium'
-                        )}
-                        aria-current={item.current ? 'page' : undefined}
-                      >
-                        {item.name}
-                      </a>
-                    ))}
+                    <span
+                      onClick={() => {
+                        setAboutModalVisible(true);
+                      }}
+                      className="cursor-pointer text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    >
+                      About
+                    </span>
                   </div>
                 </div>
               </div>
@@ -145,25 +133,15 @@ export default function Navigation() {
               </div>
             </div>
           </div>
-
+          {isAboutModalVisible ? (
+            <AboutModal
+              onClose={() => {
+                setAboutModalVisible(false);
+              }}
+            />
+          ) : null}
           <Disclosure.Panel className="sm:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block px-3 py-2 rounded-md text-base font-medium'
-                  )}
-                  aria-current={item.current ? 'page' : undefined}
-                >
-                  {item.name}
-                </a>
-              ))}
-            </div>
+            <div className="px-2 pt-2 pb-3 space-y-1" />
           </Disclosure.Panel>
         </>
       )}

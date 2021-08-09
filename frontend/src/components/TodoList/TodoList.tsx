@@ -5,7 +5,7 @@ import { TodoListQuery } from '../../__generated__/TodoListQuery.graphql';
 import TodoItem from './components/TodoItem/TodoItem';
 import AddTodoItem from './components/AddTodoItem';
 
-function TodoList() {
+export default function TodoList() {
   const data = useLazyLoadQuery<TodoListQuery>(
     graphql`
       query TodoListQuery {
@@ -33,5 +33,3 @@ function TodoList() {
     </div>
   );
 }
-
-export default TodoList;

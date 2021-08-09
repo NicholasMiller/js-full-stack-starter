@@ -1,5 +1,3 @@
-directive @cacheControl(maxAge: Int, scope: CacheControlScope) on FIELD_DEFINITION | OBJECT | INTERFACE
-
 """
 Direct the client to resolve this field locally, either from the cache or local resolvers.
 """
@@ -39,6 +37,7 @@ scalar Void
 scalar DateTime
 
 type Viewer {
+  id: ID!
   firstName: String!
   lastName: String!
   email: String!
@@ -49,6 +48,8 @@ type TodoItem {
   id: ID!
   item: String!
   createdAt: DateTime!
+  completedAt: DateTime
+  userId: ID!
 }
 
 type Query {
@@ -74,11 +75,3 @@ type Mutation {
   addTodoItem(input: AddTodoItemMutationInput!): TodoItem
   completeTodoItem(input: CompleteTodoItemMutationInput!): TodoItem
 }
-
-enum CacheControlScope {
-  PUBLIC
-  PRIVATE
-}
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
