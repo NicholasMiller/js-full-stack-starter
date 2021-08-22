@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import TodoList from '../TodoList';
 import { RelayEnvironmentProvider } from 'react-relay';

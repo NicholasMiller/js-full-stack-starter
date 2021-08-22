@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useMutation } from 'react-relay';
 import type { LoginMutation } from '../../__generated__/LoginMutation.graphql';

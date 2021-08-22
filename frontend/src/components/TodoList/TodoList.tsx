@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay';
 import { TodoListQuery } from '../../__generated__/TodoListQuery.graphql';
@@ -11,15 +10,19 @@ export default function TodoList() {
       query TodoListQuery {
         todoItems {
           id
-          ...TodoItem_item
         }
       }
     `,
     {}
   );
 
+  console.log('SOMETHING ELSE');
+
   if (!data?.todoItems) {
+    console.log('BADFAFDA');
     return null;
+  } else {
+    console.log('BAM BAM', data);
   }
 
   return (
@@ -27,7 +30,7 @@ export default function TodoList() {
       <ul>
         <AddTodoItem />
         {data.todoItems.map((i) => (
-          <TodoItem item={i} key={`todo-item-${i?.id}`} />
+          <span>{i?.id}</span>
         ))}
       </ul>
     </div>
