@@ -10,19 +10,15 @@ export default function TodoList() {
       query TodoListQuery {
         todoItems {
           id
+          ...TodoItem_item
         }
       }
     `,
     {}
   );
 
-  console.log('SOMETHING ELSE');
-
   if (!data?.todoItems) {
-    console.log('BADFAFDA');
     return null;
-  } else {
-    console.log('BAM BAM', data);
   }
 
   return (
@@ -30,7 +26,7 @@ export default function TodoList() {
       <ul>
         <AddTodoItem />
         {data.todoItems.map((i) => (
-          <span>{i?.id}</span>
+          <TodoItem item={i} key={`todo-item-${i?.id}`} />
         ))}
       </ul>
     </div>
